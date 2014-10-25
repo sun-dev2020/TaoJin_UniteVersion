@@ -1,0 +1,101 @@
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/Code/libqrencode
+END
+mask.c
+K 25
+svn:wc:ra_dav:version-url
+V 146
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/Code/libqrencode/mask.c
+END
+bitstream.c
+K 25
+svn:wc:ra_dav:version-url
+V 151
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/Code/libqrencode/bitstream.c
+END
+qrinput.h
+K 25
+svn:wc:ra_dav:version-url
+V 149
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/Code/libqrencode/qrinput.h
+END
+rscode.c
+K 25
+svn:wc:ra_dav:version-url
+V 148
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/Code/libqrencode/rscode.c
+END
+QRCodeGenerator.m
+K 25
+svn:wc:ra_dav:version-url
+V 157
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/Code/libqrencode/QRCodeGenerator.m
+END
+mask.h
+K 25
+svn:wc:ra_dav:version-url
+V 146
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/Code/libqrencode/mask.h
+END
+bitstream.h
+K 25
+svn:wc:ra_dav:version-url
+V 151
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/Code/libqrencode/bitstream.h
+END
+rscode.h
+K 25
+svn:wc:ra_dav:version-url
+V 148
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/Code/libqrencode/rscode.h
+END
+qrencode.c
+K 25
+svn:wc:ra_dav:version-url
+V 150
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/Code/libqrencode/qrencode.c
+END
+split.c
+K 25
+svn:wc:ra_dav:version-url
+V 147
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/Code/libqrencode/split.c
+END
+qrencode.h
+K 25
+svn:wc:ra_dav:version-url
+V 150
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/Code/libqrencode/qrencode.h
+END
+qrspec.c
+K 25
+svn:wc:ra_dav:version-url
+V 148
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/Code/libqrencode/qrspec.c
+END
+split.h
+K 25
+svn:wc:ra_dav:version-url
+V 147
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/Code/libqrencode/split.h
+END
+qrspec.h
+K 25
+svn:wc:ra_dav:version-url
+V 148
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/Code/libqrencode/qrspec.h
+END
+qrinput.c
+K 25
+svn:wc:ra_dav:version-url
+V 149
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/Code/libqrencode/qrinput.c
+END
+QRCodeGenerator.h
+K 25
+svn:wc:ra_dav:version-url
+V 157
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/Code/libqrencode/QRCodeGenerator.h
+END

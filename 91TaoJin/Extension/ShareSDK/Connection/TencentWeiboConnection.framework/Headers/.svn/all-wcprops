@@ -1,0 +1,89 @@
+K 25
+svn:wc:ra_dav:version-url
+V 183
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Connection/TencentWeiboConnection.framework/Headers
+END
+SSTencentWeiboEduReader.h
+K 25
+svn:wc:ra_dav:version-url
+V 209
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Connection/TencentWeiboConnection.framework/Headers/SSTencentWeiboEduReader.h
+END
+SSTencentWeiboTagReader.h
+K 25
+svn:wc:ra_dav:version-url
+V 209
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Connection/TencentWeiboConnection.framework/Headers/SSTencentWeiboTagReader.h
+END
+SSTencentWeiboCredential.h
+K 25
+svn:wc:ra_dav:version-url
+V 210
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Connection/TencentWeiboConnection.framework/Headers/SSTencentWeiboCredential.h
+END
+SSTencentWeiboVideoReader.h
+K 25
+svn:wc:ra_dav:version-url
+V 211
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Connection/TencentWeiboConnection.framework/Headers/SSTencentWeiboVideoReader.h
+END
+SSTencentWeiboUser.h
+K 25
+svn:wc:ra_dav:version-url
+V 204
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Connection/TencentWeiboConnection.framework/Headers/SSTencentWeiboUser.h
+END
+SSTencentWeiboTweet.h
+K 25
+svn:wc:ra_dav:version-url
+V 205
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Connection/TencentWeiboConnection.framework/Headers/SSTencentWeiboTweet.h
+END
+SSTencentWeiboShareContentEntity.h
+K 25
+svn:wc:ra_dav:version-url
+V 218
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Connection/TencentWeiboConnection.framework/Headers/SSTencentWeiboShareContentEntity.h
+END
+SSTencentWeiboUserReader.h
+K 25
+svn:wc:ra_dav:version-url
+V 210
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Connection/TencentWeiboConnection.framework/Headers/SSTencentWeiboUserReader.h
+END
+TencentWeiboConnection.h
+K 25
+svn:wc:ra_dav:version-url
+V 208
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Connection/TencentWeiboConnection.framework/Headers/TencentWeiboConnection.h
+END
+SSTencentWeiboTweetReader.h
+K 25
+svn:wc:ra_dav:version-url
+V 211
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Connection/TencentWeiboConnection.framework/Headers/SSTencentWeiboTweetReader.h
+END
+SSTencentWeiboErrorInfo.h
+K 25
+svn:wc:ra_dav:version-url
+V 209
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Connection/TencentWeiboConnection.framework/Headers/SSTencentWeiboErrorInfo.h
+END
+SSTencentWeiboCareerReader.h
+K 25
+svn:wc:ra_dav:version-url
+V 212
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Connection/TencentWeiboConnection.framework/Headers/SSTencentWeiboCareerReader.h
+END
+SSTencentWeiboMusicReader.h
+K 25
+svn:wc:ra_dav:version-url
+V 211
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Connection/TencentWeiboConnection.framework/Headers/SSTencentWeiboMusicReader.h
+END
+ISSTencentWeiboApp.h
+K 25
+svn:wc:ra_dav:version-url
+V 204
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Connection/TencentWeiboConnection.framework/Headers/ISSTencentWeiboApp.h
+END

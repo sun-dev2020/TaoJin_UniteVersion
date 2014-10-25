@@ -1,0 +1,346 @@
+//
+//  ScratchViewController.m
+//  91TaoJin
+//
+//  Created by keyrun on 14-5-8.
+//  Copyright (c) 2014年 guomob. All rights reserved.
+//
+
+#import "ScratchViewController.h"
+#import "HeadToolBar.h"
+#import "TaoJinButton.h"
+#import "UIImage+ColorChangeTo.h"
+#import "UniversalTip.h"
+#import "TaoJinLabel.h"
+#import "ScratchImageView.h"
+#import "StatusBar.h"
+#import "ScratchContentView.h"
+#import "MyUserDefault.h"
+#import "AsynURLConnection.h"
+#import "LoadingView.h"
+#import "ScratchPrize.h"
+#import "VisitViewController.h"
+
+@interface ScratchViewController ()<ScratchImageViewDelegate>{
+    HeadToolBar *headView;                              //顶部横栏
+    TaoJinButton *scratchBtn;                           //重新刮奖按钮
+    TaoJinLabel *awardsLab;                             //中奖奖项
+    UIImage *scratchImg;                                //刮奖区域的遮罩层
+    NSArray *awardsAry;                                 //全部中奖奖项
+    CGRect scratchFrame;                                //刮奖区域的frame
+//    int index;                                          //中奖的位置（测试）
+    int timeOutCount;                                   //超时次数
+    ScratchPrize *scratch;                              //刮刮乐对象
+    ScratchContentView *scratchContentView;             //奖项视图
+    UIImageView *scratchImgView;                        //遮罩层视图
+    ScratchImageView *_scratchImageView;                 //遮罩层控制视图
+    BOOL isUploadScratching;                           //判断是否正在上传刮奖信息
+    BOOL isFrist;                                       //判断是否第一次加载数据
+    
+    MScrollVIew *ms;
+    UniversalTip *tipView;
+    BOOL isBack;
+}
+
+@end
+
+@implementation ScratchViewController
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // Custom initialization
+        
+    }
+    return self;
+}
+
+-(void)initWithObjects{
+    awardsAry = @[@"特 等 奖",@"一 等 奖",@"二 等 奖",@"三 等 奖",@"四 等 奖",@"五 等 奖",@"六 等 奖"];
+    isUploadScratching = NO;
+    isFrist = YES;
+    isBack = NO;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    self.view.backgroundColor = [UIColor whiteColor];
+    [self initWithObjects];
+
+    headView = [[HeadToolBar alloc] initWithTitle:@"刮刮乐" leftBtnTitle:@"返回" leftBtnImg:GetImage(@"back.png") leftBtnHighlightedImg:GetImage(@"back_sel.png") rightLabTitle:@"刮奖次数：" backgroundColor:KPurpleColor2_0];
+    headView.leftBtn.tag = 1;
+    [headView.leftBtn addTarget:self action:@selector(onClickBackBtn:) forControlEvents:UIControlEventTouchUpInside];
+    
+    ms = [[MScrollVIew alloc] initWithFrame:CGRectMake(0, headView.frame.origin.y + headView.frame.size.height, kmainScreenWidth, kmainScreenHeigh - headView.frame.size.height - headView.frame.origin.y) andWithPageCount:1 backgroundImg:nil];
+    ms.msDelegate = self;
+    ms.bounces = YES;
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0.0f, -kmainScreenHeigh, kmainScreenWidth, kmainScreenHeigh)];
+    view.backgroundColor = KPurpleColor2_0;
+    [ms addSubview:view];
+    
+    UIView *backgroundView1 = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, kmainScreenWidth, 213.0f)];
+    backgroundView1.backgroundColor = KPurpleColor2_0;
+    [self.view addSubview:headView];
+    [ms addSubview:backgroundView1];
+    //抽奖上半部分的背景
+    UIImage *scratchBackgroundUpImg = [UIImage imageNamed:@"scratchBackground_up"];
+    UIImageView *scracthBackgroundUpImgView = [[UIImageView alloc] initWithImage:scratchBackgroundUpImg];
+    scracthBackgroundUpImgView.frame = CGRectMake(kmainScreenWidth/2 - scratchBackgroundUpImg.size.width/2, 10.0f, scratchBackgroundUpImg.size.width, scratchBackgroundUpImg.size.height);
+    [ms addSubview:scracthBackgroundUpImgView];
+    //奖项
+    scratchContentView = [[ScratchContentView alloc] initWithFrame:CGRectMake(70.0f, 71.0f, 185.0f, 90.0f)];
+    [scratchContentView setAwards:awardsAry];
+    [ms addSubview:scratchContentView];
+    
+    //抽奖下半部分的背景
+    UIImage *scratchBackgroundDownImg = [UIImage imageNamed:@"scratchBackground_bottom"];
+    UIImageView *scracthBackgroundDownImgView = [[UIImageView alloc] initWithImage:scratchBackgroundDownImg];
+    scracthBackgroundDownImgView.frame = CGRectMake(scracthBackgroundUpImgView.frame.origin.x, scracthBackgroundUpImgView.frame.origin.y + scracthBackgroundUpImgView.frame.size.height, scratchBackgroundDownImg.size.width, scratchBackgroundDownImg.size.height);
+    [ms addSubview:scracthBackgroundDownImgView];
+    //抽奖的遮罩层
+    scratchImg = [UIImage imageNamed:@"scratch"];
+    scratchImgView = [[UIImageView alloc] initWithImage:scratchImg];
+    scratchImgView.frame = CGRectMake(77.0f, 190.0f, scratchImg.size.width, scratchImg.size.height);
+    
+    awardsLab = [[TaoJinLabel alloc] initWithFrame:CGRectMake(77.0f, 190.0f, scratchImg.size.width, scratchImg.size.height) text:@"" font:[UIFont systemFontOfSize:30] textColor:KRedColor2_0 textAlignment:NSTextAlignmentCenter numberLines:1];
+    [ms addSubview:awardsLab];
+    
+    scratchFrame = scratchImgView.frame;
+    _scratchImageView = [[ScratchImageView alloc] initWithFrame:scratchFrame];
+    _scratchImageView.delegate = self;
+    [_scratchImageView setImage:scratchImg radius:10];
+    _scratchImageView.image = scratchImg;
+    _scratchImageView.userInteractionEnabled = NO;
+    _scratchImageView.isCanScratch = NO;
+    [ms addSubview:_scratchImageView];
+
+    //提示按钮
+    scratchBtn = [[TaoJinButton alloc] initWithFrame:CGRectMake(Spacing2_0, _scratchImageView.frame.origin.y + _scratchImageView.frame.size.height + 48.0f, kmainScreenWidth - 2 * Spacing2_0, 40.0f) titleStr:@"请刮开刮奖区图层" titleColor:KGreenColor2_0 font:[UIFont systemFontOfSize:16] logoImg:nil backgroundImg:[UIImage createImageWithColor:kImageBackgound2_0]];
+    [scratchBtn setEnabled:NO];
+    [scratchBtn addTarget:self action:@selector(scratchAction:) forControlEvents:UIControlEventTouchUpInside];
+    [ms addSubview:scratchBtn];
+    //刮奖规则
+    NSArray *tipAry = @[@"1.邀请一个有效用户（做过任务的用户视为有效用户）可获得一次刮奖机会；",@"2.中奖概率为100%，邀请用户越多，获得刮奖次数越多；",@"3.该刮奖活动与苹果公司无关。"];
+    tipView = [[UniversalTip alloc] initWithFrame:CGRectMake(Spacing2_0, scratchBtn.frame.origin.y + scratchBtn.frame.size.height + 10.0f, kmainScreenWidth - 2 * Spacing2_0, 0.0f) andTips:tipAry andTipBackgrundColor:[UIColor colorWithRed:240.0f/255.0f green:240.0f/255.0f blue:255.0f/255.0f alpha:1] withTipFont:[UIFont systemFontOfSize:11] andTipImage:[UIImage imageNamed:@"dengpao_purple"] andTipTitle:@"刮奖机会获得方法：" andTextColor:KPurpleColor2_0];
+    [ms addSubview:tipView];
+    [self.view addSubview:ms];
+    
+    [self requestToGetScratch];
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    
+}
+
+-(void)viewDidDisappear:(BOOL)animated{
+    if(isBack){
+        [headView removeFromSuperview];
+        headView = nil;
+        [scratchBtn removeFromSuperview];
+        scratchBtn = nil;
+        [awardsLab removeFromSuperview];
+        awardsLab = nil;
+        [scratchContentView removeFromSuperview];
+        scratchContentView = nil;
+        [scratchImgView removeFromSuperview];
+        scratchImgView  = nil;
+        [_scratchImageView removeFromSuperview];
+        _scratchImageView = nil;
+        [tipView removeFromSuperview];
+        tipView = nil;
+        [ms removeFromSuperview];
+        ms = nil;
+        
+        scratchImg  = nil;
+        awardsAry = nil;
+        scratch = nil;
+    }
+}
+
+- (void)onClickBackBtn:(UIButton* )btn{
+    switch (btn.tag) {
+            //返回按钮
+        case 1:
+        {
+            isBack = YES;
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+    }
+}
+
+/**
+ *  获取当前刮奖区域已刮的面积
+ *
+ */
+- (void)mdScratchImageView:(ScratchImageView *)scratchImageView didChangeMaskingProgress:(CGFloat)maskingProgress {
+//	NSLog(@"%s %p progress == %.2f", __PRETTY_FUNCTION__, scratchImageView, maskingProgress);
+    if(scratch.scratch_winNum > 0){
+        if(maskingProgress >= 0.5 && !isUploadScratching){
+            [self requestToCommitScratchResult];
+        }
+    }else{
+//        [StatusBar showTipMessageWithStatus:@"邀请好友可以获取更多刮奖机会哦" andImage:[UIImage imageNamed:@"laba.png"] andTipIsBottom:YES];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"暂无可刮奖次数" message:@"可通过邀请好友获取更多刮奖次数；\n邀请一个有效用户奖励一次刮奖机会；\n中奖概率100%，是否立即邀请好友？" delegate:self cancelButtonTitle:@"算了" otherButtonTitles:@"去邀请好友", nil];
+        [alertView show];
+    }
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    [alertView dismissWithClickedButtonIndex:buttonIndex animated:YES];
+}
+
+-(void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex{
+    if(buttonIndex == 1){
+        VisitViewController *visit = [[VisitViewController alloc] init];
+//        UINavigationController *nc = (UINavigationController* )[UIApplication sharedApplication].keyWindow.rootViewController;
+        [self.navigationController pushViewController:visit animated:YES];
+    }
+}
+
+/**
+ *  刮奖按钮点击事件
+ *
+ */
+-(void)scratchAction:(id)sender{
+    [self.view addSubview:_scratchImageView];
+    [scratchBtn setBackgroundImage:[UIImage createImageWithColor:kImageBackgound2_0] forState:UIControlStateNormal];
+    [scratchBtn setTitle:@"请刮开刮奖区图层" forState:UIControlStateNormal];
+    [scratchBtn setTitleColor:KGreenColor2_0 forState:UIControlStateNormal];
+    [scratchBtn setEnabled:NO];
+    
+    NSString *awardsStr = [awardsAry objectAtIndex:(scratch.scratch_winNum)];
+    [awardsLab setText:awardsStr];
+}
+
+/**
+ *  请求获取刮刮乐信息
+ */
+-(void)requestToGetScratch{
+    if(isFrist){
+         [[LoadingView showLoadingView] actViewStartAnimation];
+        isFrist = NO;
+    }
+    NSString *urlStr = [NSString stringWithFormat:kUrlPre,kOnlineWeb,@"ActivityUI",@"GetScratchInfo"];
+    NSLog(@"请求获取刮刮乐信息【urlStr】 = %@",urlStr);
+    NSString *sid = [[MyUserDefault standardUserDefaults] getSid];
+    NSDictionary *dic = @{@"sid":sid};
+    [AsynURLConnection requestWithURL:urlStr dataDic:dic timeOut:httpTimeout success:^(NSData *data) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSDictionary *dataDic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+            timeOutCount = 0;
+            NSLog(@"请求获取刮刮乐信息【response】 = %@",dataDic);
+            int flag = [[dataDic objectForKey:@"flag"] intValue];
+            if(flag == 1){
+                NSDictionary *body = [dataDic objectForKey:@"body"];
+                scratch = [[ScratchPrize alloc] initWithScratchAry:[body objectForKey:@"SPrizes"] scratchNum:[[body objectForKey:@"SNum"] intValue] winNum:[[body objectForKey:@"SWin"] intValue]];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[LoadingView showLoadingView] actViewStopAnimation];
+                    [headView setRightLabText:[NSString stringWithFormat:@"刮奖次数：%d",scratch.scratch_scratchNum]];
+                    [scratchContentView setScratchContents:scratch.scratch_prizes];
+                    _scratchImageView.userInteractionEnabled = YES;
+                    if(scratch.scratch_scratchNum > 0){
+                        _scratchImageView.isCanScratch = YES;
+                        NSString *awardsStr = [awardsAry objectAtIndex:(scratch.scratch_winNum - 1)];
+                        [awardsLab setText:awardsStr];
+                        [awardsLab sizeToFit];
+                        awardsLab.frame = CGRectMake(scratchImgView.frame.origin.x + (scratchImgView.frame.size.width/2 - awardsLab.frame.size.width/2), scratchImgView.frame.origin.y + (scratchImgView.frame.size.height/2 - awardsLab.frame.size.height/2), awardsLab.frame.size.width, awardsLab.frame.size.height);
+                    }
+                    float height = ms.frame.size.height + tipView.frame.size.height - (ms.frame.size.height - tipView.frame.origin.y) + 10.0f + (64.0f - ms.frame.origin.y);
+                    height = height > ms.frame.size.height ? height : ms.frame.size.height + 1;
+                    [ms setContentSize:CGSizeMake(kmainScreenWidth, height)];
+                });
+            }
+        });
+    } fail:^(NSError *error) {
+        NSLog(@"请求获取刮刮乐信息【error】 = %@",error);
+        if(error.code == timeOutErrorCode){
+            //连接超时
+//            if(timeOutCount < 2){
+//                timeOutCount ++;
+////                [self requestToGetScratch];
+//            }else{
+//                timeOutCount = 0;
+                [[LoadingView showLoadingView] actViewStopAnimation];
+//            }
+        }
+    }];
+}
+
+/**
+ *  请求提交刮奖信息
+ */
+-(void)requestToCommitScratchResult{
+    isUploadScratching = YES;
+    NSString *urlStr = [NSString stringWithFormat:kUrlPre,kOnlineWeb,@"ActivityUI",@"JoinScratch"];
+    int randomNum = arc4random() % 100000;
+//    [urlStr stringByAppendingString:[NSString stringWithFormat:@"random=%d",randomNum]];
+//    NSLog(@"请求提交刮奖信息【urlStr】 = %@",urlStr);
+    NSString *sid = [[MyUserDefault standardUserDefaults] getSid];
+    NSDictionary *dic = @{@"sid":sid, @"random":[NSString stringWithFormat:@"%d",randomNum]};
+    [AsynURLConnection requestWithURL:urlStr dataDic:dic timeOut:httpTimeout success:^(NSData *data) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSDictionary *dataDic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+            timeOutCount = 0;
+            NSLog(@"请求提交刮奖信息【response】 = %@",dataDic);
+            int flag = [[dataDic objectForKey:@"flag"] intValue];
+            if(flag == 1){
+                NSDictionary *body = [dataDic objectForKey:@"body"];
+                scratch.scratch_winNum = [[body objectForKey:@"SWin"] intValue];
+                scratch.scratch_scratchNum = [[body objectForKey:@"SNum"] intValue];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [_scratchImageView removeFromSuperview];
+                    _scratchImageView = nil;
+                    
+                    _scratchImageView = [[ScratchImageView alloc] initWithFrame:scratchFrame];
+                    _scratchImageView.delegate = self;
+                    [_scratchImageView setImage:nil radius:10];
+                    _scratchImageView.image = scratchImg;
+                    if(scratch.scratch_winNum > 0)
+                        _scratchImageView.isCanScratch = YES;
+                    else
+                        _scratchImageView.isCanScratch = NO;
+                    
+                    [scratchBtn setBackgroundImage:[UIImage createImageWithColor:KGreenColor2_0] forState:UIControlStateNormal];
+                    [scratchBtn setBackgroundImage:[UIImage createImageWithColor:KLightGreenColor2_0] forState:UIControlStateHighlighted];
+                    [scratchBtn setTitle:@"再次刮奖" forState:UIControlStateNormal];
+                    [scratchBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+                    [scratchBtn setEnabled:YES];
+                    
+                    [headView setRightLabText:[NSString stringWithFormat:@"刮奖次数：%d",scratch.scratch_scratchNum]];
+                    isUploadScratching = NO;
+                });
+            }
+        });
+    } fail:^(NSError *error) {
+        NSLog(@"请求提交刮奖信息【error】 = %@",error);
+        if(error.code == timeOutErrorCode){
+            //连接超时
+            [[LoadingView showLoadingView] actViewStopAnimation];
+        }
+    }];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+    
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+@end
+
+
+
+
+
+
+
+

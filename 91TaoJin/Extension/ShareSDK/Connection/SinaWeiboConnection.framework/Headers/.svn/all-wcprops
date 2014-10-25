@@ -1,0 +1,89 @@
+K 25
+svn:wc:ra_dav:version-url
+V 180
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Connection/SinaWeiboConnection.framework/Headers
+END
+SSSinaWeiboCredential.h
+K 25
+svn:wc:ra_dav:version-url
+V 204
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Connection/SinaWeiboConnection.framework/Headers/SSSinaWeiboCredential.h
+END
+SSSinaWeiboVisibleReader.h
+K 25
+svn:wc:ra_dav:version-url
+V 207
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Connection/SinaWeiboConnection.framework/Headers/SSSinaWeiboVisibleReader.h
+END
+SSSinaWeiboErrorInfo.h
+K 25
+svn:wc:ra_dav:version-url
+V 203
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Connection/SinaWeiboConnection.framework/Headers/SSSinaWeiboErrorInfo.h
+END
+SSSinaWeiboUser.h
+K 25
+svn:wc:ra_dav:version-url
+V 198
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Connection/SinaWeiboConnection.framework/Headers/SSSinaWeiboUser.h
+END
+ISSSinaWeiboApp.h
+K 25
+svn:wc:ra_dav:version-url
+V 198
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Connection/SinaWeiboConnection.framework/Headers/ISSSinaWeiboApp.h
+END
+SSSinaWeiboUserInfoReader.h
+K 25
+svn:wc:ra_dav:version-url
+V 208
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Connection/SinaWeiboConnection.framework/Headers/SSSinaWeiboUserInfoReader.h
+END
+SSSinaWeiboShareContentEntity.h
+K 25
+svn:wc:ra_dav:version-url
+V 212
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Connection/SinaWeiboConnection.framework/Headers/SSSinaWeiboShareContentEntity.h
+END
+SinaWeiboConnection.h
+K 25
+svn:wc:ra_dav:version-url
+V 202
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Connection/SinaWeiboConnection.framework/Headers/SinaWeiboConnection.h
+END
+SSSinaWeiboFavoriteReader.h
+K 25
+svn:wc:ra_dav:version-url
+V 208
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Connection/SinaWeiboConnection.framework/Headers/SSSinaWeiboFavoriteReader.h
+END
+SSSinaWeiboTagReader.h
+K 25
+svn:wc:ra_dav:version-url
+V 203
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Connection/SinaWeiboConnection.framework/Headers/SSSinaWeiboTagReader.h
+END
+SSSinaWeiboStatus.h
+K 25
+svn:wc:ra_dav:version-url
+V 200
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Connection/SinaWeiboConnection.framework/Headers/SSSinaWeiboStatus.h
+END
+SSSinaWeiboStatusInfoReader.h
+K 25
+svn:wc:ra_dav:version-url
+V 210
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Connection/SinaWeiboConnection.framework/Headers/SSSinaWeiboStatusInfoReader.h
+END
+SSSinaWeiboCommentReader.h
+K 25
+svn:wc:ra_dav:version-url
+V 207
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Connection/SinaWeiboConnection.framework/Headers/SSSinaWeiboCommentReader.h
+END
+SSSinaWeiboGeoReader.h
+K 25
+svn:wc:ra_dav:version-url
+V 203
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Connection/SinaWeiboConnection.framework/Headers/SSSinaWeiboGeoReader.h
+END

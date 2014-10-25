@@ -1,0 +1,799 @@
+//
+//  AppDelegate.m
+//  TJiphone
+//
+//  Created by keyrun on 13-9-26.
+//  Copyright (c) 2013年 keyrun. All rights reserved.
+//
+
+#import "AppDelegate.h"
+#import "TJViewController.h"
+#import "UserViewController.h"
+#import "RewardViewController.h"
+#import "LoadingView.h"
+#import "TjNavigationController.h"
+#import "MyUserDefault.h"
+#import "AsynURLConnection.h"
+#import "NSString+IsEmply.h"
+#import "UIAlertView+NetPrompt.h"
+#import "LoadingView.h"
+#import "NSString+md5Code.h"
+#import "BPush.h"
+#import "WelcomeViewController.h"
+
+#import <ShareSDK/ShareSDK.h>
+#import <TencentOpenAPI/QQApi.h>
+#import "WXApi.h"
+#import "WeiboApi.h"
+#import <TencentOpenAPI/QQApiInterface.h>
+#import <TencentOpenAPI/TencentOAuth.h>
+#import "WeiboSDK.h"
+#import <TencentOpenAPI/WeiBoAPI.h>
+#import "NSDate+nowTime.h"
+
+@implementation AppDelegate
+{
+    Reachability *hostReach;
+    TJViewController *wel;
+    int pushID;
+    int timeOutCount;                               //记录超时次数，如果大于1就弹出对话框
+    
+    int timeErrorCount ;                           //记录登录时 flag = 3 次数
+    
+    BOOL enterForward ;
+    
+    BOOL isFrist;
+    NSDictionary *launchDic ;
+}
+
+- (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
+    //检测网络
+    
+    enterForward =YES;
+    isFrist = YES;
+    timeErrorCount = 0 ;
+    [self checkNetwork];
+    return YES;
+}
+
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
+    timeOutCount = 0;
+    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    self.window.backgroundColor = [UIColor whiteColor];
+    
+    if (IOS_Version < 7.0) {
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque];
+    }else{
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
+    }
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(makeATest) name:@"resetLogin" object:nil];   //重新登录通知
+    
+    [BPush setupChannel:launchOptions];
+    [BPush setDelegate:self];
+    
+    NSString* version = [[[NSBundle mainBundle]infoDictionary]objectForKey:(NSString* )kCFBundleVersionKey];
+    [BPush setTags:[NSArray arrayWithObject:version]];     //百度push 标记
+    
+    
+    wel = [[TJViewController alloc] initWithNibName:nil bundle:nil];
+    wel.state = 0;
+    [wel setViews];
+    if (IOS_Version >= 7.0) {
+        TjNavigationController *nv = [[TjNavigationController alloc]initWithRootViewController:wel];
+        self.window.rootViewController = nv;
+    }else{
+        UINavigationController *nv = [[UINavigationController alloc]initWithRootViewController:wel];
+        self.window.rootViewController = nv;
+    }
+    
+    
+    //    WelcomeViewController *welcomePage =[[WelcomeViewController alloc] initWithNibName:nil bundle:nil];
+    //    self.window.rootViewController =welcomePage;
+    
+    [self.window makeKeyAndVisible];
+    
+    [MobClick startWithAppkey:kUMengAppKey reportPolicy:BATCH channelId:@""];
+    [MobClick setLogEnabled:YES];
+    
+    
+    [self initSharePlatform];  //初始化分享平台
+    
+    
+    //正常启动（不是点击push消息启动）launchOptions 为空
+    if (launchOptions != nil) {
+        NSDictionary *dictionary = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+        if (dictionary != nil) {    //接收到通知
+            NSLog(@" Start Dictionary %@",dictionary);
+            launchDic = [[NSDictionary alloc] initWithDictionary:dictionary] ;
+
+        }
+    }
+    [self initBadgeNumber];
+    return YES;
+}
+
+-(void)initSharePlatform{
+    [ShareSDK registerApp:kShareSDKKey];
+    
+    [ShareSDK connectSinaWeiboWithAppKey:kSinaKey appSecret:kSinaSecret redirectUri:kSinaUrl weiboSDKCls:[WeiboSDK class]];   //sina
+    
+    [ShareSDK connectTencentWeiboWithAppKey:kTXWBKey appSecret:kTXWBSecert redirectUri:kSinaUrl wbApiCls:[WeiboApi class]];     //tx weibo
+    
+    [ShareSDK connectWeChatSessionWithAppId:kWXFriendKey wechatCls:[WXApi class]];
+    [ShareSDK connectWeChatTimelineWithAppId:kWXFriendKey wechatCls:[WXApi class]];         // 微信
+    
+    [ShareSDK connectQQWithAppId:kQQFriendKey qqApiCls:[QQApi class]];        //qq 好友
+    
+    [ShareSDK connectQZoneWithAppKey:kQQFriendKey appSecret:kQQZoneKey qqApiInterfaceCls:[QQApiInterface class] tencentOAuthCls:[TencentOAuth class]];     //qq空间
+    
+    
+}
+- (void) onMethod:(NSString*)method response:(NSDictionary*)data {
+    NSDictionary *res =[[NSDictionary alloc] initWithDictionary:data];
+    if ([BPushRequestMethod_Bind isEqualToString:method]) {
+        int returnCode =[[res valueForKey:BPushRequestErrorCodeKey] intValue];
+        if (returnCode == BPushErrorCode_Success) {
+            NSLog(@" ___%@  ",res);
+            NSString *userid =[res valueForKey:BPushRequestUserIdKey];
+            [[MyUserDefault standardUserDefaults] setBDUserPushId:userid];
+            
+            [self sendBDPushIdToService];       // 登陆成功后将百度推送id 发到服务器   模拟器收不到push id 会造成crash
+        }
+    }else if ([BPushRequestMethod_Unbind isEqualToString:method]){   //没绑定上
+        
+    }
+}
+-(void)registRemoteNotification{
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge| UIRemoteNotificationTypeAlert| UIRemoteNotificationTypeSound)];
+}
+-(void)initBadgeNumber{
+    //重置图标上的消息数量
+    NSLog(@"   重置消息数");
+    
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:1];
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
+    
+    //    UIApplication* application = [UIApplication sharedApplication];
+    //    NSArray* scheduledNotifications = [NSArray arrayWithArray:application.scheduledLocalNotifications];
+    //    application.scheduledLocalNotifications = scheduledNotifications;
+    
+    
+}
+-(void)makeATest{
+    //    [self startLoadingActviewAnimation];
+    //    [[LoadingView showLoadingView] actViewStartAnimation];
+    NSUUID *uuid = [[UIDevice currentDevice] identifierForVendor];
+    NSString *uuidStr = [NSString stringWithFormat:@"%@",uuid];
+    NSArray *array = [uuidStr componentsSeparatedByString:@">"];
+    
+    NSString *uuidString = [array objectAtIndex:1];
+    
+    NSString *sysVer = [UIDevice currentDevice].systemVersion;
+    //设备类型需要加入运营商参数
+    NSString *model2 = [[UIDevice currentDevice] model];
+    NSLog(@"model2 = %@",model2);
+    if ([model2 isEqualToString:@"iPhone"]) {
+        CTTelephonyNetworkInfo* netInfo =[[CTTelephonyNetworkInfo alloc]init];
+        CTCarrier* ct = [netInfo subscriberCellularProvider];
+        model2 =[NSString stringWithFormat:@"%@%@",model2,[ct mobileNetworkCode]];
+        NSLog(@"---CTCarrier--%@--%@--%@--%@-",model2,[ct carrierName],[ct mobileNetworkCode],[ct mobileCountryCode]);
+    }
+    
+    NSString *model = [self getDeviceModel];
+    
+    NSString *appVer = [[[NSBundle mainBundle]infoDictionary]objectForKey:(NSString* )kCFBundleVersionKey];
+    
+    NSString *openudid = [OpenUDID value];
+    
+    NSString *adid = [[[ASIdentifierManager sharedManager]advertisingIdentifier] UUIDString];
+    
+    NSString *vendor = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+    
+    NSString *macAdress = [self macaddress];
+    
+    NSString *useToken;
+    if ([[MyUserDefault standardUserDefaults] getSandBoxUserToken]) {
+        useToken =[[MyUserDefault standardUserDefaults] getSandBoxUserToken];
+    }else{
+        if ([SSKeychain passwordForService:@"91taojinToken" account:@"userToken"]) {
+            useToken = [SSKeychain passwordForService:@"91taojinToken" account:@"userToken"];
+            [[MyUserDefault standardUserDefaults] setSandBoxUserToken:useToken];
+        }else{
+            for (int i=0; i < 3; i++) {
+                useToken = [SSKeychain passwordForService:@"91taojinToken" account:@"userToken"];
+                if (useToken) {
+                    break;
+                }
+            }
+        }
+    }
+//    useToken = [SSKeychain passwordForService:@"91taojinToken" account:@"userToken"];
+    // 2014.04.04 新包首次登陆的接口改变  不发送userToken
+    if ([NSString isEmply:useToken]) {
+        NSString *sign = [NSString stringWithFormat:@"%@%@91taojinToken",adid,model];
+        sign = [sign stringByReplacingOccurrencesOfString:@"-" withString:@""];
+        sign = [NSString md5Code:sign];
+        useToken =[self getUserToken];
+        NSDictionary *dic = @{@"Mac": macAdress, @"Version":appVer, @"mobel":model, @"chanal":@"company", @"vindor":vendor,@"sys_ver":sysVer, @"uuid":uuidString, @"idfa":adid, @"ouuid":openudid, @"sign":sign ,@"token" :useToken};
+        [self requestToLoginWithoutToken:dic];
+    }else{
+        // 加密数据
+        NSString* sign = [NSString stringWithFormat:@"%@%@91taojinToken",useToken,model];
+        sign = [sign stringByReplacingOccurrencesOfString:@"+" withString:@" "];
+        sign = [NSString md5Code:sign];
+        NSDictionary *dic = @{@"token": useToken, @"Mac":macAdress, @"Version":appVer, @"mobel":model, @"chanal":@"company", @"vindor":vendor, @"sys_ver":sysVer, @"uuid":uuidString, @"idfa":adid, @"ouuid":openudid, @"sign":sign};
+        [self requestToLoginWithToken:dic];
+    }
+}
+-(NSString *)getUserToken{
+    NSDate* nowDate=[NSDate date];
+    NSTimeZone* zone=[NSTimeZone systemTimeZone];
+    NSInteger interval=[zone secondsFromGMTForDate:nowDate];
+    NSDate* locationDate=[nowDate dateByAddingTimeInterval:interval];
+    int rand =arc4random()%10000000;
+    NSString * useToken=[NSString stringWithFormat:@"%@%d",locationDate,rand];
+    [SSKeychain setPassword:useToken forService:@"91taojinToken" account:@"userToken"];
+    [[MyUserDefault standardUserDefaults] setSandBoxUserToken:useToken];
+    return useToken;
+}
+//请求非token登录（new）
+-(void)requestToLoginWithoutToken:(NSDictionary *)dic {
+    NSString *urlStr = [NSString stringWithFormat:kUrlPre,kOnlineWeb,@"LoginUI",@"Login"];
+    [self requestToLogin:dic urlStr:urlStr];
+}
+
+//请求token登录（new）
+-(void)requestToLoginWithToken:(NSDictionary *)dic {
+    NSString *urlStr = [NSString stringWithFormat:kUrlPre,kOnlineWeb,@"LoginUI",@"Login"];
+    [self requestToLogin:dic urlStr:urlStr];
+}
+
+//请求登录（new）
+-(void)requestToLogin:(NSDictionary *)dic urlStr:(NSString *)urlStr{
+    if(isFrist){
+        //        [[LoadingView showLoadingView] actViewStartAnimation];
+        isFrist = NO;
+    }
+    NSLog(@"请求登录【urlStr】 = %@",urlStr);
+    NSLog(@"请求登录【request】 = %@",dic);
+    [AsynURLConnection requestWithURL:urlStr dataDic:dic timeOut:httpTimeout success:^(NSData *data) {
+        NSString *err =[[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+        NSLog(@" err = %@",err);
+        timeOutCount = 0;               //超时次数清空
+        NSDictionary *dataDic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+        NSString *loginStr =[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        NSLog(@"请求登录【response】 = %@  %@",dataDic ,loginStr);
+        int flag = [[dataDic objectForKey:@"flag"] integerValue];
+        if (flag == 1) {
+            //登录成功
+            NSDictionary *body = [dataDic objectForKey:@"body"];
+            if([[body objectForKey:@"flag"] intValue] == 1 || [[body objectForKey:@"flag"] intValue] == 0){
+                NSString *sid = [body objectForKey:@"sid"];
+                [[MyUserDefault standardUserDefaults] setSid:sid];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"LoginedNotic" object:nil];   //发送登录成功通知
+
+                if ([body objectForKey:@"Token"]) {                                 // 记录服务器返回的用户标示
+                    NSString* passWord = [body objectForKey:@"Token"];
+                    [SSKeychain setPassword:passWord forService:@"91taojinToken" account:@"userToken"];
+                }
+                NSString *nickName = [body objectForKey:@"UserNickname"];
+                [[MyUserDefault standardUserDefaults] setUserNickname:nickName];
+                if([NSString isEmply:nickName]){
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"makeAnickname" object:nil userInfo:nil];
+                }
+                
+                //保存取名奖励和邀请奖励金豆数
+                int inviteGold = [[body objectForKey:@"InviteGold"] intValue];
+                [[MyUserDefault standardUserDefaults] setInviteGold:inviteGold];
+                int gold = [[body objectForKey:@"SetNameGold"] intValue];
+                [[MyUserDefault standardUserDefaults] setUserSetNameGold:gold];
+                
+                //保存用户ID
+                NSString *userId = [body objectForKey:@"UserId"];
+                [[MyUserDefault standardUserDefaults] setUserId:userId];
+                
+                NSString *userInvcode =[body objectForKey:@"invcode"];
+                [[MyUserDefault standardUserDefaults] setUserInvcode:userInvcode];
+                
+                
+                NSString *codeKey =[body objectForKey:@"token"];
+                NSString *md5Str = [NSString md5Code:codeKey];
+                md5Str =[md5Str substringWithRange:NSMakeRange(24, 8)];      //加密token 取后8位
+                [[MyUserDefault standardUserDefaults] setRequestCodeKey:md5Str];
+                
+                NSDictionary *update = [body objectForKey:@"Update"];
+                if(update != nil && update.allKeys.count != 0){
+                    [[MyUserDefault standardUserDefaults] setUpdate:update];
+                    int delay = [[update objectForKey:@"Delay"] intValue];
+                    [[MyUserDefault standardUserDefaults] setUpdateDelayTime:delay];
+                }else{
+                    [[MyUserDefault standardUserDefaults] setUpdate:nil];
+                }
+                //保存当前时间
+                NSDate *nowDate = [NSDate date];
+                NSTimeInterval timenow = [nowDate timeIntervalSince1970];
+                long long int date = (long long int)timenow;
+                NSNumber *time = [NSNumber numberWithLongLong:date];
+                [[MyUserDefault standardUserDefaults] setLoginTime:time];
+                [[MyUserDefault standardUserDefaults] setLogined:YES];
+                //保存签到的刷新时间
+                [[MyUserDefault standardUserDefaults] setSignFreshTime:[body objectForKey:@"signFreshTime"]];
+                [[MyUserDefault standardUserDefaults] setViewFreshTime:[body objectForKey:@"viewFreshTime"]];
+                //保存用户的头像地址
+                [[MyUserDefault standardUserDefaults] setUserIconUrlStr:[body objectForKey:@"userIconUrl"]];
+                
+                if (enterForward) {
+                    wel.state =1;
+                    [wel requestWelcomeAndShow];
+
+                    if (IOS_Version >= 7.0) {
+                        TjNavigationController* nv = [[TjNavigationController alloc]initWithRootViewController:wel];
+                        self.window.rootViewController = nv;
+                    }else{
+                        UINavigationController* nv = [[UINavigationController alloc]initWithRootViewController:wel];
+                        self.window.rootViewController = nv;
+                    }
+
+                }
+                
+                if (!enterForward || [[update objectForKey:@"Type"]intValue] ==0) {//强制升级的话  从后台进前台时也显示
+                    [wel checkUpdate];
+                }
+                [self requestToSendLastTime];
+                [self registRemoteNotification];    // 注册远程通知
+                
+                if (launchDic && enterForward == YES) {
+                    [self receivePushMessage:launchDic];    //登陆成功 传递接收到的push消息
+                    launchDic = nil;
+                }
+                
+                //判断是否需要显示有米广告
+                int youMiAd = [[body objectForKey:@"BannerAD"] intValue];
+                if(youMiAd == 1){
+                    //测试
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"YouMiAd" object:nil];
+                }
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    //                    [[LoadingView showLoadingView] actViewStopAnimation];
+                });
+            }else{
+                [[MyUserDefault standardUserDefaults] setLogined:NO];
+                [[LoadingView showLoadingView] actViewStopAnimation];
+                [self showLoackingView];
+            }
+        }else if(flag == 2){
+            //登录失败，账号被锁
+            [[MyUserDefault standardUserDefaults] setLogined:NO];
+            [[LoadingView showLoadingView] actViewStopAnimation];
+            //            [self showLoackingView];
+        }else if (flag == 3){
+            [[MyUserDefault standardUserDefaults] setLogined:NO];
+            [[LoadingView showLoadingView] actViewStopAnimation];
+            if ( timeErrorCount < 2) {
+                timeErrorCount ++ ;
+                [self requestToLogin:dic urlStr:urlStr];
+            }
+            
+        }
+    }fail:^(NSError *error) {
+        NSLog(@"-----请求登录【error】 = %@ -----",error);
+        if(error.code == timeOutErrorCode){
+            //连接超时,重新登录
+            if(timeOutCount < 2){
+                timeOutCount ++;
+                [self requestToLoginWithToken:dic];
+            }else{
+                timeOutCount = 0;
+                if(![UIAlertView isInit]){
+                    [[LoadingView showLoadingView] actViewStopAnimation];
+                    UIAlertView *alertView = [UIAlertView showNetAlert];
+                    alertView.delegate = self;
+                    alertView.tag = kNetViewTag + 1;
+                    [alertView show];
+                    alertView = nil;
+                }
+            }
+        }
+    }];
+}
+
+//提示账户锁住弹窗
+-(void)showLoackingView{
+    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"非常抱歉，您的账号已被锁定" delegate:self cancelButtonTitle:@"退出" otherButtonTitles: nil];
+    alertView.delegate = self;
+    alertView.tag = 10010;
+    [alertView show];
+}
+
+
+-(NSString* )getDeviceModel{
+    struct utsname systemInfo;
+    uname(&systemInfo);
+    NSString* model = [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
+    return model;
+}
+
+//请求发送最后一次时间
+-(void)requestToSendLastTime{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"requestToSpecialMisson" object:nil];
+    NSString *urlStr = [NSString stringWithFormat:kUrlPre,kOnlineWeb,@"LoginUI",@"Scene"];
+    NSLog(@"请求发送最后一次时间[urlStr] = %@",urlStr);
+    NSNumber *timelong = [[MyUserDefault standardUserDefaults] getAppUseTime] ;
+    if(timelong == nil){
+        timelong = [NSNumber numberWithInt:0];
+    }
+    NSNumber *netWork = [[MyUserDefault standardUserDefaults] getNetWork];
+    NSNumber *loginTime = [[MyUserDefault standardUserDefaults] getLoginTime];
+    NSString *sid = [[MyUserDefault standardUserDefaults] getSid];
+    NSDictionary *dic = @{@"timelong": timelong, @"network":netWork, @"logintime":loginTime, @"sid":sid};
+    
+    [AsynURLConnection requestWithURL:urlStr dataDic:dic timeOut:httpTimeout success:^(NSData *data){
+        NSLog(@"发送最后一次时间【request】 = %@",dic);
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSDictionary *dicData = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+            NSLog(@"发送最后一次时间【reponse】 = %@",dicData);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+            });
+        });
+    }fail:^(NSError *error){
+        NSLog(@"-----请求发送最后一次时间【error】 = %@ -----",error);
+    }];
+}
+
+
+-(void)checkNetwork{
+    NSLog(@"检测网络");
+    
+    hostReach = [Reachability reachabilityWithHostName:@"www.baidu.com"];
+    [hostReach startNotifier];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
+}
+
+
+-(void)updateInterfaceWithReachability:(Reachability *)curReach{
+    NetworkStatus status = [curReach currentReachabilityStatus];
+    NSLog(@"网络状态值：%d",status);
+    if (status == NotReachable) {
+        NSLog(@"网络状态 ：无");
+        [[MyUserDefault standardUserDefaults] setNetWork:NotReachable];
+        if (![UIAlertView isInit]) {
+            UIAlertView *alertView = [UIAlertView showNetAlert];
+            alertView.delegate = self;
+            alertView.tag = kNetViewTag;
+            [alertView show];
+            alertView = nil;
+        }
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"hidAllKeyBoard" object:nil userInfo:nil];
+    }else if(status == ReachableViaWiFi){
+        NSLog(@"网络状态 ：Wifi");
+        [[MyUserDefault standardUserDefaults] setNetWork:ReachableViaWiFi];
+        [self makeATest];
+    }else if (status == ReachableVia2G){
+        NSLog(@"网络状态 ：WWAN-2G");
+        [[MyUserDefault standardUserDefaults] setNetWork:ReachableVia2G];
+        [self makeATest];
+    }else if (status == ReachableVia3G){
+        NSLog(@"网络状态 ：WWAN-3G");
+        [[MyUserDefault standardUserDefaults] setNetWork:ReachableVia3G];
+        [self makeATest];
+    }
+}
+
+//弹窗的按钮事件
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (alertView.tag == kNetViewTag) {
+        //检测网络发现无网络下的弹窗
+        [alertView dismissWithClickedButtonIndex:0 animated:NO];
+        [UIAlertView resetNetAlertNil];
+        [[LoadingView showLoadingView] actViewStartAnimation];
+        [self onClickNetCheckBtn];
+    }else if(alertView.tag == kNetViewTag + 1){
+        //请求登录超时
+        [alertView dismissWithClickedButtonIndex:0 animated:NO];
+        [UIAlertView resetNetAlertNil];
+        [[LoadingView showLoadingView] actViewStartAnimation];
+        [self makeATest];
+    }else if(alertView.tag == 10010){
+        //退出程序弹窗
+        [self exitApplication];
+    }
+}
+
+-(void)reachabilityChanged:(NSNotification* )notic{
+    id curReach = [notic object];
+    if ([curReach isKindOfClass:[Reachability class]]) {
+        NSParameterAssert([curReach isKindOfClass:[Reachability class]]);
+        [self updateInterfaceWithReachability:curReach];
+    }
+}
+
+-(void)onClickNetCheckBtn{
+    [hostReach stopNotifier];
+    hostReach = nil;
+    [self performSelector:@selector(checkNetwork) withObject:nil afterDelay:10.0];
+}
+
+- (NSString *)macaddress{
+	int                     mib[6];
+	size_t                  len;
+	char                    *buf;
+	unsigned char           *ptr;
+	struct if_msghdr        *ifm;
+	struct sockaddr_dl      *sdl;
+	
+	mib[0] = CTL_NET;
+	mib[1] = AF_ROUTE;
+	mib[2] = 0;
+	mib[3] = AF_LINK;
+	mib[4] = NET_RT_IFLIST;
+	
+	if ((mib[5] = if_nametoindex("en0")) == 0) {
+		printf("Error: if_nametoindex error/n");
+		return NULL;
+	}
+	
+	if (sysctl(mib, 6, NULL, &len, NULL, 0) < 0) {
+		printf("Error: sysctl, take 1/n");
+		return NULL;
+	}
+	
+	if ((buf = malloc(len)) == NULL) {
+		printf("Could not allocate memory. error!/n");
+		return NULL;
+	}
+	
+	if (sysctl(mib, 6, buf, &len, NULL, 0) < 0) {
+		printf("Error: sysctl, take 2");
+		return NULL;
+	}
+	
+	ifm = (struct if_msghdr *)buf;
+	sdl = (struct sockaddr_dl *)(ifm + 1);
+	ptr = (unsigned char *)LLADDR(sdl);
+	// NSString *outstring = [NSString stringWithFormat:@"%02x:%02x:%02x:%02x:%02x:%02x", *ptr, *(ptr+1), *(ptr+2), *(ptr+3), *(ptr+4), *(ptr+5)];
+	NSString *outstring = [NSString stringWithFormat:@"%02x%02x%02x%02x%02x%02x", *ptr, *(ptr+1), *(ptr+2), *(ptr+3), *(ptr+4), *(ptr+5)];
+	free(buf);
+	return [outstring uppercaseString];
+}
+
+-(void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken{
+    
+    //获取令牌
+    NSString* userDeviceToken = [NSString stringWithFormat:@"%@",deviceToken];
+    userDeviceToken = [[userDeviceToken substringWithRange:NSMakeRange(0, 72)] substringWithRange:NSMakeRange(1, 71)];
+    userDeviceToken = [userDeviceToken stringByReplacingOccurrencesOfString:@" " withString:@""];
+    //保存
+    [[MyUserDefault standardUserDefaults] setUserDeviceToken:userDeviceToken];
+    
+    // 将push的token 保存在钥匙串里
+    NSString *pushToken2 = [NSString md5Code:userDeviceToken];
+    [[MyUserDefault standardUserDefaults] setUserMd5DeveiceToken:pushToken2];
+    [SSKeychain setPassword:userDeviceToken forService:@"91taojinToken" account:@"pushToken"];
+    [SSKeychain setPassword:pushToken2 forService:@"91taojinToken" account:@"md5Token"];
+    
+    if (![[self getDeviceModel] isEqualToString:@"x86_64"]) {
+        [BPush registerDeviceToken:deviceToken];
+        [BPush bindChannel];
+    }
+    
+}
+-(void)sendBDPushIdToService{
+    NSString *userDeviceToken =[[MyUserDefault standardUserDefaults] getUserDeviceToken];
+    NSString *pushToken2 =[[MyUserDefault standardUserDefaults] getUserMd5DeveiceToken];
+    NSString *pushid =[[MyUserDefault standardUserDefaults] getBDUserPushId];
+    [self sendTokenToService:userDeviceToken andMd5Token:pushToken2 andUserPushId:pushid];
+}
+//发送token到服务器成功后 记录下注册成功
+-(void)sendTokenToService:(NSString* )token andMd5Token:(NSString* )mdToken andUserPushId:(NSString *)pushId{
+    NSString *sid = [[MyUserDefault standardUserDefaults] getSid];
+    NSDictionary *dic = @{@"sid": sid, @"token":token, @"91token":mdToken ,@"bPushId" :pushId ,@"chanal" :@"company"};
+    [self requestToSetToken:dic];
+}
+
+//请求设置Token（new）
+-(void)requestToSetToken:(NSDictionary *)dic{
+    NSString *urlStr = [NSString stringWithFormat:kUrlPre,kOnlineWeb,@"LoginUI",@"setToken"];
+    [AsynURLConnection requestWithURL:urlStr dataDic:dic timeOut:httpTimeout success:^(NSData *data){
+        NSDictionary *dataDic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+        NSDictionary *body = [dataDic objectForKey:@"body"];
+        if([[body objectForKey:@"State"] integerValue] == 0){
+            [[MyUserDefault standardUserDefaults] setIsRegistRemotion:YES];
+        }else{
+            [[MyUserDefault standardUserDefaults] setIsRegistRemotion:NO];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            //            [[LoadingView showLoadingView] actViewStopAnimation];
+        });
+    }fail:^(NSError *error) {
+        NSLog(@"-----请求设置Token【error】 = %@ -----",error);
+    }];
+}
+
+-(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error{
+    
+}
+
+
+//关闭应用程序动画
+- (void)exitApplication {
+    
+    [UIView beginAnimations:@"exitApplication" context:nil];
+    [UIView setAnimationDuration:0.5];
+    [UIView setAnimationDelegate:self];
+    [UIView setAnimationTransition:UIViewAnimationTransitionNone forView:self.window cache:NO];
+    [UIView setAnimationDidStopSelector:@selector(animationFinished:finished:context:)];
+    self.window.transform = CGAffineTransformIdentity;
+    self.window.transform = CGAffineTransformMakeScale(0.01f, 0.01f);
+    [UIView commitAnimations];
+    
+}
+
+//关闭应用程序
+- (void)animationFinished:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context {
+    if ([animationID compare:@"exitApplication"] == 0) {
+        exit(0);
+    }
+}
+
+-(void)receivePushMessage:(NSDictionary* )infor{
+    NSLog(@"  pushInfo %@ ",infor);
+    NSString *act;
+    if ([infor objectForKey:@"fh"]) {       // 兑奖记录的跳转
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"PushRewardList" object:nil userInfo:infor];
+        //收到push消息后  给后台返回记录
+        act = [NSString stringWithFormat:@"fh="];
+        act =[act stringByAppendingString:[infor objectForKey:@"fh"]];
+        [self sendAPushMakerToService:act];
+    }else if ([infor objectForKey:@"lt"]){       //乐透竞彩的跳转
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"PushLottery" object:nil userInfo:infor];
+        act= [NSString stringWithFormat:@"lt="];
+        act =[act stringByAppendingString:[infor objectForKey:@"lt"]];
+        [self sendAPushMakerToService:act];
+    }else if ([infor objectForKey:@"jp"]){    // 奖品
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"PushReward" object:nil userInfo:infor];
+        act =[NSString stringWithFormat:@"jp="];
+        act =[act stringByAppendingString:[infor objectForKey:@"jp"]];
+        [self sendAPushMakerToService:act];
+    }else if ([infor objectForKey:@"hd"]){   // 活动
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"PushHuoDong" object:nil userInfo:infor];
+        act =[NSString stringWithFormat:@"hd="];
+        act =[act stringByAppendingString:[infor objectForKey:@"hd"]];
+        [self sendAPushMakerToService:act];
+    }else if ([infor objectForKey:@"sd"]){ // 晒单
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"PushShow" object:nil userInfo:infor];
+        act =[NSString stringWithFormat:@"sd="];
+        act =[act stringByAppendingString:[infor objectForKey:@"sd"]];
+        [self sendAPushMakerToService:act];
+    }
+    
+    
+    /*
+     NSDictionary* aps = [infor objectForKey:@"aps"];
+     int msgType = [[aps objectForKey:@"Type"] integerValue];
+     int tid = [[aps objectForKey:@"Tid"] integerValue];
+     pushID = [[aps objectForKey:@"Id"] integerValue];
+     if (tid ==0 && msgType != 5) {
+     
+     }else{
+     NSNumber* num =[NSNumber numberWithInt:tid];
+     NSDictionary* dic =[NSDictionary dictionaryWithObjectsAndKeys:num,@"tid", nil];
+     switch (msgType) {
+     case 1:
+     //淘金活动
+     [[NSNotificationCenter defaultCenter]postNotificationName:@"PushAppDetails" object:nil userInfo:dic];
+     break;
+     case 2:
+     //奖品
+     [[NSNotificationCenter defaultCenter]postNotificationName:@"PushRewardGoods" object:nil userInfo:dic];
+     break;
+     case 3:
+     //社区话题
+     [[NSNotificationCenter defaultCenter]postNotificationName:@"PushTopicDetails" object:nil userInfo:dic];
+     break;
+     case 4:
+     //版本升级 ，正常启动
+     //                [[NSNotificationCenter defaultCenter]postNotificationName:@"PushUpdateTip" object:nil userInfo:dic];
+     break;
+     case 5:
+     //消息中心
+     [[NSNotificationCenter defaultCenter]postNotificationName:@"PushMessageCenter" object:nil userInfo:dic];
+     break;
+     }
+     }
+     */
+    
+    
+    
+}
+-(void)sendAPushMakerToService:(NSString *)pushAct{
+    
+    NSString *urlString = [NSString stringWithFormat:kUrlPre,kOnlineWeb,@"OtherUI",@"BaiduPush"];
+    NSDictionary *dic =[[NSDictionary alloc] initWithObjectsAndKeys:pushAct,@"Act",[NSNumber numberWithInt:1],@"Num",@"click",@"Operate", nil];
+    NSLog(@" PUSH 统计 = %@",dic);
+    [AsynURLConnection requestWithURL:urlString dataDic:dic timeOut:httpTimeout success:^(NSData *data) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSDictionary *dataDic =[NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+            NSLog(@" BDpush %@ ",dataDic);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                //              [[LoadingView showLoadingView] actViewStopAnimation];
+            });
+        });
+    } fail:^(NSError *error) {
+        
+    }];
+}
+
+
+//app启动时 在此方法接收push消息
+-(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo{
+    [self initBadgeNumber];
+    //app在前台
+    if(application.applicationState == 0) {
+        
+    }else if(application.applicationState == 1){   //app在后台
+        if (userInfo) {
+            [self receivePushMessage:userInfo];
+        }
+    }
+}
+- (void)applicationWillResignActive:(UIApplication *)application{
+    
+}
+
+- (void)applicationDidEnterBackground:(UIApplication *)application
+{
+    NSDate* nowDate=[NSDate date];
+    NSTimeInterval time =[nowDate timeIntervalSince1970];
+    long long int date =(long long int)time;
+    NSUserDefaults* ud =[NSUserDefaults standardUserDefaults];
+    if ([ud objectForKey:@"LoginTime"]) {
+        long long oldtime =[[ud objectForKey:@"LoginTime"]integerValue];
+        double betweentime = date- oldtime;
+        NSNumber *timeNum =[NSNumber numberWithDouble:betweentime];
+        [ud setValue:timeNum  forKey:@"AppUseTime"];
+    }
+    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
+    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+}
+
+- (void)applicationWillEnterForeground:(UIApplication *)application
+{
+    enterForward =NO;
+    [self makeATest];
+    [self initBadgeNumber];
+    NSLog(@"applicationWillEnterForeground");
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application
+{
+    
+    
+    NSLog(@"applicationDidBecomeActive");
+    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+}
+
+- (void)applicationWillTerminate:(UIApplication *)application
+{
+    // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+#pragma mark - WXApiDelegate
+
+-(BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url{
+    return [ShareSDK handleOpenURL:url
+                        wxDelegate:self];
+}
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation
+{
+    return [ShareSDK handleOpenURL:url
+                 sourceApplication:sourceApplication
+                        annotation:annotation
+                        wxDelegate:self];
+}
+
+@end

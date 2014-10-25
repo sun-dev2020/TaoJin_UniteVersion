@@ -1,0 +1,203 @@
+K 25
+svn:wc:ra_dav:version-url
+V 158
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/ShareSDK.framework/Headers
+END
+ISSUserField.h
+K 25
+svn:wc:ra_dav:version-url
+V 173
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/ShareSDK.framework/Headers/ISSUserField.h
+END
+ISSShareOptions.h
+K 25
+svn:wc:ra_dav:version-url
+V 176
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/ShareSDK.framework/Headers/ISSShareOptions.h
+END
+ShareSDKDef.h
+K 25
+svn:wc:ra_dav:version-url
+V 172
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/ShareSDK.framework/Headers/ShareSDKDef.h
+END
+ShareSDKPlugin.h
+K 25
+svn:wc:ra_dav:version-url
+V 175
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/ShareSDK.framework/Headers/ShareSDKPlugin.h
+END
+ISSContent.h
+K 25
+svn:wc:ra_dav:version-url
+V 171
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/ShareSDK.framework/Headers/ISSContent.h
+END
+ISSPlatformShareInfo.h
+K 25
+svn:wc:ra_dav:version-url
+V 181
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/ShareSDK.framework/Headers/ISSPlatformShareInfo.h
+END
+NSArray+ShareSDK.h
+K 25
+svn:wc:ra_dav:version-url
+V 177
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/ShareSDK.framework/Headers/NSArray+ShareSDK.h
+END
+ISSViewDelegate.h
+K 25
+svn:wc:ra_dav:version-url
+V 176
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/ShareSDK.framework/Headers/ISSViewDelegate.h
+END
+SSHTTPClient.h
+K 25
+svn:wc:ra_dav:version-url
+V 173
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/ShareSDK.framework/Headers/SSHTTPClient.h
+END
+ISSiPadViewController.h
+K 25
+svn:wc:ra_dav:version-url
+V 182
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/ShareSDK.framework/Headers/ISSiPadViewController.h
+END
+ISSPage.h
+K 25
+svn:wc:ra_dav:version-url
+V 168
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/ShareSDK.framework/Headers/ISSPage.h
+END
+ISSContainer.h
+K 25
+svn:wc:ra_dav:version-url
+V 173
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/ShareSDK.framework/Headers/ISSContainer.h
+END
+ShareSDKEventHandlerDef.h
+K 25
+svn:wc:ra_dav:version-url
+V 184
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/ShareSDK.framework/Headers/ShareSDKEventHandlerDef.h
+END
+SSAwardViewController.h
+K 25
+svn:wc:ra_dav:version-url
+V 182
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/ShareSDK.framework/Headers/SSAwardViewController.h
+END
+SSViewDef.h
+K 25
+svn:wc:ra_dav:version-url
+V 170
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/ShareSDK.framework/Headers/SSViewDef.h
+END
+ISSShareViewDelegate.h
+K 25
+svn:wc:ra_dav:version-url
+V 181
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/ShareSDK.framework/Headers/ISSShareViewDelegate.h
+END
+SSLogDef.h
+K 25
+svn:wc:ra_dav:version-url
+V 169
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/ShareSDK.framework/Headers/SSLogDef.h
+END
+ISSShareActionSheetItem.h
+K 25
+svn:wc:ra_dav:version-url
+V 184
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/ShareSDK.framework/Headers/ISSShareActionSheetItem.h
+END
+ISSPlatformUser.h
+K 25
+svn:wc:ra_dav:version-url
+V 176
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/ShareSDK.framework/Headers/ISSPlatformUser.h
+END
+ISSAuthOptions.h
+K 25
+svn:wc:ra_dav:version-url
+V 175
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/ShareSDK.framework/Headers/ISSAuthOptions.h
+END
+ShareSDKTypeDef.h
+K 25
+svn:wc:ra_dav:version-url
+V 176
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/ShareSDK.framework/Headers/ShareSDKTypeDef.h
+END
+UIViewController+ShareSDK.h
+K 25
+svn:wc:ra_dav:version-url
+V 186
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/ShareSDK.framework/Headers/UIViewController+ShareSDK.h
+END
+ISSPlatformAuthSession.h
+K 25
+svn:wc:ra_dav:version-url
+V 183
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/ShareSDK.framework/Headers/ISSPlatformAuthSession.h
+END
+SSHTTPParameters.h
+K 25
+svn:wc:ra_dav:version-url
+V 177
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/ShareSDK.framework/Headers/SSHTTPParameters.h
+END
+ISSPlatformCredential.h
+K 25
+svn:wc:ra_dav:version-url
+V 182
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/ShareSDK.framework/Headers/ISSPlatformCredential.h
+END
+ISSShareActionSheet.h
+K 25
+svn:wc:ra_dav:version-url
+V 180
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/ShareSDK.framework/Headers/ISSShareActionSheet.h
+END
+SSInheritValue.h
+K 25
+svn:wc:ra_dav:version-url
+V 175
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/ShareSDK.framework/Headers/SSInheritValue.h
+END
+ISSPlatformShareContentEntity.h
+K 25
+svn:wc:ra_dav:version-url
+V 190
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/ShareSDK.framework/Headers/ISSPlatformShareContentEntity.h
+END
+ShareSDK.h
+K 25
+svn:wc:ra_dav:version-url
+V 169
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/ShareSDK.framework/Headers/ShareSDK.h
+END
+ISSShareView.h
+K 25
+svn:wc:ra_dav:version-url
+V 173
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/ShareSDK.framework/Headers/ISSShareView.h
+END
+ISSPlatform.h
+K 25
+svn:wc:ra_dav:version-url
+V 172
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/ShareSDK.framework/Headers/ISSPlatform.h
+END
+ShareSDK+Utils.h
+K 25
+svn:wc:ra_dav:version-url
+V 175
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/ShareSDK.framework/Headers/ShareSDK+Utils.h
+END
+ISSPlatformApp.h
+K 25
+svn:wc:ra_dav:version-url
+V 175
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/ShareSDK.framework/Headers/ISSPlatformApp.h
+END

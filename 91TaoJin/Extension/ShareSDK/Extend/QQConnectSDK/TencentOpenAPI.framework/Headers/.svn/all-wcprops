@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 184
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Extend/QQConnectSDK/TencentOpenAPI.framework/Headers
+END
+QQApi.h
+K 25
+svn:wc:ra_dav:version-url
+V 192
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Extend/QQConnectSDK/TencentOpenAPI.framework/Headers/QQApi.h
+END
+sdkdef.h
+K 25
+svn:wc:ra_dav:version-url
+V 193
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Extend/QQConnectSDK/TencentOpenAPI.framework/Headers/sdkdef.h
+END
+QQApiInterfaceObject.h
+K 25
+svn:wc:ra_dav:version-url
+V 207
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Extend/QQConnectSDK/TencentOpenAPI.framework/Headers/QQApiInterfaceObject.h
+END
+QQApiInterface.h
+K 25
+svn:wc:ra_dav:version-url
+V 201
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Extend/QQConnectSDK/TencentOpenAPI.framework/Headers/QQApiInterface.h
+END
+TencentMessageObject.h
+K 25
+svn:wc:ra_dav:version-url
+V 207
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Extend/QQConnectSDK/TencentOpenAPI.framework/Headers/TencentMessageObject.h
+END
+TencentOAuthObject.h
+K 25
+svn:wc:ra_dav:version-url
+V 205
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Extend/QQConnectSDK/TencentOpenAPI.framework/Headers/TencentOAuthObject.h
+END
+WeiBoAPI.h
+K 25
+svn:wc:ra_dav:version-url
+V 195
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Extend/QQConnectSDK/TencentOpenAPI.framework/Headers/WeiBoAPI.h
+END
+TencentOAuth.h
+K 25
+svn:wc:ra_dav:version-url
+V 199
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Extend/QQConnectSDK/TencentOpenAPI.framework/Headers/TencentOAuth.h
+END
+WeiyunAPI.h
+K 25
+svn:wc:ra_dav:version-url
+V 196
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Extend/QQConnectSDK/TencentOpenAPI.framework/Headers/WeiyunAPI.h
+END
+TencentApiInterface.h
+K 25
+svn:wc:ra_dav:version-url
+V 206
+/midou_center/!svn/ver/3986/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91TaoJin/Extension/ShareSDK/Extend/QQConnectSDK/TencentOpenAPI.framework/Headers/TencentApiInterface.h
+END

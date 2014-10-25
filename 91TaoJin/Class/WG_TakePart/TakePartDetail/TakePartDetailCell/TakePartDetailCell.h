@@ -1,0 +1,28 @@
+//
+//  TakePartDetailCell.h
+//  91TaoJin
+//
+//  Created by keyrun on 14-6-3.
+//  Copyright (c) 2014年 guomob. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "TaoJinButton.h"
+#import "TakePartDetail.h"
+
+@interface TakePartDetailCell : UITableViewCell<UIWebViewDelegate>
+
+@property (nonatomic, strong) TaoJinButton *takePartBtn;                                      //【参与评论】按钮
+
+@property (nonatomic ,strong) UIWebView *headWebView ;
+
+
+-(void)showTakePartDetail:(TakePartDetail *)takePartDetail;
+-(float)getTakePartCellHeight;
+
+
+-(void)resetCellLayerFrame ;
+
+-(void) hiddenTheLine;
+
+@end
