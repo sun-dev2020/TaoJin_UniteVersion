@@ -1054,10 +1054,10 @@
     
 }
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data{
-    NSLog(@"发送UDID信息成功 message = %@",[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+    NSLog(@"发送信息成功 message = %@",[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
 }
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error{
-    NSLog(@"发送UDID信息失败 error = %@" ,error.description);
+    NSLog(@"发送信息失败 error = %@" ,error.userInfo);
 }
 /**
  *  请求发送UDID信息

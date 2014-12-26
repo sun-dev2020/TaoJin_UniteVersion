@@ -5,13 +5,15 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>4F3C7ED8-610A-4A56-A383-711B114A2FF9</string>
+	<string>A3090D50-5B47-40C6-8A0A-E01C029BC8EC</string>
 	<key>IDESourceControlProjectName</key>
 	<string>91淘金</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>EA4F317E-23E5-4BCE-8A3B-A3C57A14BE5F</key>
 		<string>http://10.1.1.14:83/midou_center/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite</string>
+		<key>F592CB7D-F09C-452C-A523-7F2D8DD267F5</key>
+		<string>https://github.com/SunMicheal/TaoJin_UniteVersion.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>TaoJin_UniteVersion/91淘金.xcodeproj/project.xcworkspace</string>
@@ -19,6 +21,8 @@
 	<dict>
 		<key>EA4F317E-23E5-4BCE-8A3B-A3C57A14BE5F</key>
 		<string>../../..</string>
+		<key>F592CB7D-F09C-452C-A523-7F2D8DD267F5</key>
+		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectRepositoryRootDictionary</key>
 	<dict>
@@ -26,7 +30,7 @@
 		<string>http://10.1.1.14:83/midou_center</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>http://10.1.1.14:83/midou_center/Code/IOS/WashGold_iOS_BAK/91WashGold_iPhone_V2.0.0_lite/TaoJin_UniteVersion/91%E6%B7%98%E9%87%91.xcodeproj</string>
+	<string>https://github.com/SunMicheal/TaoJin_UniteVersion.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
@@ -40,6 +44,14 @@
 			<string>EA4F317E-23E5-4BCE-8A3B-A3C57A14BE5F</string>
 			<key>IDESourceControlWCCName</key>
 			<string>0716</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>F592CB7D-F09C-452C-A523-7F2D8DD267F5</string>
+			<key>IDESourceControlWCCName</key>
+			<string>TaoJin_UniteVersion</string>
 		</dict>
 	</array>
 </dict>
